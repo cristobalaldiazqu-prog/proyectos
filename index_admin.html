@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - Sistema Médico Integral</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/styles_admin.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-shield-check me-2"></i>Panel Administrativo
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#dashboard"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#recintos"><i class="bi bi-building me-1"></i>Recintos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#medicos"><i class="bi bi-person-badge me-1"></i>Médicos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pacientes"><i class="bi bi-people me-1"></i>Pacientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#reportes"><i class="bi bi-graph-up me-1"></i>Reportes</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>Administrador
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Configuración</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Panel de Administración</h1>
+            <p class="hero-subtitle">Gestión integral del sistema médico</p>
+        </div>
+    </section>
+
+    <!-- Dashboard con estadísticas generales -->
+    <section id="dashboard" class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="card stats-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-calendar-check text-primary fs-1 mb-3"></i>
+                            <div class="stats-number" id="totalCitas">0</div>
+                            <p class="text-muted mb-0">Total Citas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-people text-success fs-1 mb-3"></i>
+                            <div class="stats-number" id="totalPacientes">0</div>
+                            <p class="text-muted mb-0">Pacientes Registrados</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-person-badge text-info fs-1 mb-3"></i>
+                            <div class="stats-number" id="totalMedicos">0</div>
+                            <p class="text-muted mb-0">Médicos Activos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-building text-warning fs-1 mb-3"></i>
+                            <div class="stats-number" id="totalRecintos">0</div>
+                            <p class="text-muted mb-0">Recintos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos de análisis -->
+            <div class="row g-4 mt-4">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-graph-up me-2"></i>Análisis de Citas - Últimos 30 días</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="chartCitas" height="80"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-pie-chart me-2"></i>Estados de Citas</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="chartEstados"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gestión de Recintos -->
+    <section id="recintos" class="py-5 bg-light">
+        <div class="container">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="bi bi-building me-2"></i>Gestión de Recintos</h4>
+                    <button class="btn btn-primary" onclick="abrirModalRecinto()">
+                        <i class="bi bi-plus-circle me-2"></i>Nuevo Recinto
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Dirección</th>
+                                    <th>Teléfono</th>
+                                    <th>Departamentos</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaRecintos">
+                                <!-- Se cargará dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gestión de Médicos -->
+    <section id="medicos" class="py-5">
+        <div class="container">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="bi bi-person-badge me-2"></i>Gestión de Médicos</h4>
+                    <button class="btn btn-primary" onclick="abrirModalMedico()">
+                        <i class="bi bi-plus-circle me-2"></i>Nuevo Médico
+                    </button>
+                </div>
+                <div class="card-body">
+                    <!-- Filtros -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="buscarMedico" placeholder="Buscar médico..." onkeyup="buscarMedicos()">
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" id="filtroEspecialidad" onchange="filtrarMedicos()">
+                                <option value="">Todas las especialidades</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" id="filtroRecintoMedico" onchange="filtrarMedicos()">
+                                <option value="">Todos los recintos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>RUT</th>
+                                    <th>Especialidad</th>
+                                    <th>Recinto</th>
+                                    <th>Teléfono</th>
+                                    <th>Email</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaMedicos">
+                                <!-- Se cargará dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gestión de Pacientes -->
+    <section id="pacientes" class="py-5 bg-light">
+        <div class="container">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="bi bi-people me-2"></i>Gestión de Pacientes</h4>
+                    <button class="btn btn-primary" onclick="abrirModalPaciente()">
+                        <i class="bi bi-plus-circle me-2"></i>Nuevo Paciente
+                    </button>
+                </div>
+                <div class="card-body">
+                    <!-- Filtros -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="buscarPaciente" placeholder="Buscar por nombre o RUT..." onkeyup="buscarPacientes()">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="filtroEstadoPaciente" onchange="filtrarPacientes()">
+                                <option value="">Todos los estados</option>
+                                <option value="activo">Activos</option>
+                                <option value="inactivo">Inactivos</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100" onclick="exportarPacientes()">
+                                <i class="bi bi-download me-2"></i>Exportar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>RUT</th>
+                                    <th>Edad</th>
+                                    <th>Teléfono</th>
+                                    <th>Email</th>
+                                    <th>Última Cita</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaPacientes">
+                                <!-- Se cargará dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reportes y Análisis -->
+    <section id="reportes" class="py-5">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="bi bi-file-earmark-bar-graph me-2"></i>Reportes y Análisis</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="mb-3">Generar Reporte de Citas</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label">Período</label>
+                                        <select class="form-select" id="reportePeriodo">
+                                            <option value="hoy">Hoy</option>
+                                            <option value="semana">Esta Semana</option>
+                                            <option value="mes" selected>Este Mes</option>
+                                            <option value="trimestre">Este Trimestre</option>
+                                            <option value="anio">Este Año</option>
+                                            <option value="personalizado">Personalizado</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3" id="fechasPersonalizadas" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <label class="form-label">Desde</label>
+                                                <input type="date" class="form-control" id="reporteFechaInicio">
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">Hasta</label>
+                                                <input type="date" class="form-control" id="reporteFechaFin">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="generarReporteCitas()">
+                                        <i class="bi bi-file-earmark-pdf me-2"></i>Generar Reporte
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="mb-3">Análisis de Rendimiento</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label">Tipo de Análisis</label>
+                                        <select class="form-select" id="tipoAnalisis">
+                                            <option value="medicos">Por Médico</option>
+                                            <option value="especialidades">Por Especialidad</option>
+                                            <option value="recintos">Por Recinto</option>
+                                            <option value="departamentos">Por Departamento</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Período</label>
+                                        <select class="form-select" id="analisisPeriodo">
+                                            <option value="mes">Último Mes</option>
+                                            <option value="trimestre">Último Trimestre</option>
+                                            <option value="anio">Último Año</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-success w-100" onclick="generarAnalisis()">
+                                        <i class="bi bi-graph-up me-2"></i>Generar Análisis
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Indicadores Clave de Rendimiento (KPI)</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <div class="kpi-card">
+                                                <div class="kpi-label">Tasa de Ocupación</div>
+                                                <div class="kpi-value" id="kpiOcupacion">0%</div>
+                                                <div class="kpi-trend text-success">
+                                                    <i class="bi bi-arrow-up"></i> 5% vs mes anterior
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="kpi-card">
+                                                <div class="kpi-label">Tasa de Cancelación</div>
+                                                <div class="kpi-value" id="kpiCancelacion">0%</div>
+                                                <div class="kpi-trend text-danger">
+                                                    <i class="bi bi-arrow-down"></i> 2% vs mes anterior
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="kpi-card">
+                                                <div class="kpi-label">Tiempo Promedio Espera</div>
+                                                <div class="kpi-value" id="kpiEspera">0 min</div>
+                                                <div class="kpi-trend text-success">
+                                                    <i class="bi bi-arrow-down"></i> 3 min vs mes anterior
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="kpi-card">
+                                                <div class="kpi-label">Satisfacción Pacientes</div>
+                                                <div class="kpi-value" id="kpiSatisfaccion">0%</div>
+                                                <div class="kpi-trend text-success">
+                                                    <i class="bi bi-arrow-up"></i> 4% vs mes anterior
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para Recinto -->
+    <div class="modal fade" id="modalRecinto" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalRecintoTitulo">
+                        <i class="bi bi-building me-2"></i>Nuevo Recinto
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formRecinto">
+                        <input type="hidden" id="recintoId">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nombre del Recinto *</label>
+                                <input type="text" class="form-control" id="recintoNombre" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Código</label>
+                                <input type="text" class="form-control" id="recintoCodigo">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Dirección *</label>
+                                <input type="text" class="form-control" id="recintoDireccion" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Teléfono *</label>
+                                <input type="tel" class="form-control" id="recintoTelefono" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="recintoEmail">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Departamentos</label>
+                                <div id="departamentosRecinto">
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control" placeholder="Nombre del departamento">
+                                        <button class="btn btn-outline-danger" type="button">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="agregarDepartamento()">
+                                    <i class="bi bi-plus-circle me-2"></i>Agregar Departamento
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarRecinto()">
+                        <i class="bi bi-save me-2"></i>Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Médico -->
+    <div class="modal fade" id="modalMedico" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalMedicoTitulo">
+                        <i class="bi bi-person-badge me-2"></i>Nuevo Médico
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formMedico">
+                        <input type="hidden" id="medicoId">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nombre Completo *</label>
+                                <input type="text" class="form-control" id="medicoNombre" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">RUT *</label>
+                                <input type="text" class="form-control" id="medicoRut" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Especialidad *</label>
+                                <select class="form-select" id="medicoEspecialidad" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="medicina-general">Medicina General</option>
+                                    <option value="pediatria">Pediatría</option>
+                                    <option value="cardiologia">Cardiología</option>
+                                    <option value="dermatologia">Dermatología</option>
+                                    <option value="ginecologia">Ginecología</option>
+                                    <option value="traumatologia">Traumatología</option>
+                                    <option value="oftalmologia">Oftalmología</option>
+                                    <option value="psiquiatria">Psiquiatría</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Recinto *</label>
+                                <select class="form-select" id="medicoRecinto" required>
+                                    <option value="">Seleccionar...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Teléfono *</label>
+                                <input type="tel" class="form-control" id="medicoTelefono" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="medicoEmail" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Número de Registro Médico</label>
+                                <input type="text" class="form-control" id="medicoRegistro">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarMedico()">
+                        <i class="bi bi-save me-2"></i>Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Paciente -->
+    <div class="modal fade" id="modalPaciente" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPacienteTitulo">
+                        <i class="bi bi-person-plus me-2"></i>Nuevo Paciente
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPaciente">
+                        <input type="hidden" id="pacienteId">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nombre Completo *</label>
+                                <input type="text" class="form-control" id="pacienteNombre" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">RUT *</label>
+                                <input type="text" class="form-control" id="pacienteRut" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Fecha de Nacimiento *</label>
+                                <input type="date" class="form-control" id="pacienteFechaNacimiento" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Género *</label>
+                                <select class="form-select" id="pacienteGenero" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="masculino">Masculino</option>
+                                    <option value="femenino">Femenino</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Teléfono *</label>
+                                <input type="tel" class="form-control" id="pacienteTelefono" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="pacienteEmail" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Dirección</label>
+                                <input type="text" class="form-control" id="pacienteDireccion">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Contacto de Emergencia</label>
+                                <input type="text" class="form-control" id="pacienteEmergenciaNombre" placeholder="Nombre">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Teléfono de Emergencia</label>
+                                <input type="tel" class="form-control" id="pacienteEmergenciaTelefono" placeholder="Teléfono">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarPaciente()">
+                        <i class="bi bi-save me-2"></i>Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-shield-check me-2"></i>Sistema Médico Integral</h5>
+                    <p class="text-muted">Panel administrativo para gestión integral</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">&copy; 2025 Sistema Médico Integral. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="JS/script_admin.js"></script>
+</body>
+</html>
